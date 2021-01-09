@@ -1,0 +1,163 @@
+"""
+***SPECIAL PROJECTS***
+
+MORSE CODE TRANSLATOR
+
+creator - Aryaman Bansal
+"""
+
+
+# # Morse Code
+# # A short pulse is called a “dot” and a long pulse is called a “dash”.
+# # Encoding = English to electric pulses
+# # Decoding = electric pulses to English
+
+morse ={
+    'A' : '● ▬',
+    'B' : '▬ ● ● ●',
+    'C' : '▬ ● ▬ ●',
+    'D' : '▬ ● ●',
+    'E' : '●',
+    'F' : '● ● ▬ ●',
+    'G' : '▬ ▬ ●',
+    'H' : '● ● ● ●',
+    'I' : '● ●',
+    'J' : '● ▬ ▬ ▬',
+    'K' : '▬ ● ▬',
+    'L' : '● ▬ ● ●',
+    'M' : '▬ ▬',
+    'N' : '▬ ●',
+    'O' : '▬ ▬ ▬',
+    'P' : '● ▬ ▬ ●',
+    'Q' : '▬ ▬ ● ▬',
+    'R' : '● ▬ ●',
+    'S' : '● ● ●',
+    'T' : '▬',
+    'U' : '● ● ▬',
+    'V' : '● ● ● ▬',
+    'W' : '● ▬ ▬',
+    'X' : '▬ ● ● ▬',
+    'Y' : '▬ ● ▬ ▬',
+    'Z' : '▬ ▬ ● ●',
+    '1' : '● ▬ ▬ ▬ ▬',
+    '2' : '● ● ▬ ▬ ▬',
+    '3' : '● ● ● ▬ ▬',
+    '4' : '● ● ● ● ▬',
+    '5' : '● ● ● ● ●',
+    '6' : '▬ ● ● ● ●',
+    '7' : '▬ ▬ ● ● ●',
+    '8' : '▬ ▬ ▬ ● ●',
+    '9' : '▬ ▬ ▬ ▬ ●',
+    '0' : '▬ ▬ ▬ ▬ ▬'
+    }
+
+
+
+# # Morse to English
+# # decodes morse code to english/number
+def decode(s):
+    for k,v in morse.items():
+        if s==v:
+            return k
+            
+def reform(s):
+    s=s.replace('.','● ')
+    s=s.replace('-','▬ ')
+    s=s.replace('●','● ')
+    s=s.replace('▬','▬ ')
+    # # this removes the last unwanted space created by
+    # # replace function to avoid error
+    s=s[:-1]
+    return s
+
+def code_extract(s):
+    s+='  '
+    raw=''  # stores morse code  
+    eng=''  # stores english or numbers
+    t=[]
+    for i in range(len(s)-1):
+        # # checks the code
+        if s[i]!=' ':
+            raw+=s[i]
+        # # checks if the code is of a different word
+        elif s[i]==' ' and s[i+1]==' ':
+            # # this is avoids translating none as morse
+            # # when raw is ''
+            # # which generates error
+            if raw!='':
+                raw=reform(raw)
+                eng+=decode(raw)
+            t.append(eng)
+            eng=''
+            raw=''
+        # # checks if the code is of the same word
+        elif s[i]==' ' and s[i+1]!=' ':
+            # # this is avoids translating none as morse
+            # # when raw is ''
+            # # which generates error
+            if raw!='':
+                raw=reform(raw)
+                eng+=decode(raw)
+                raw=''
+    return t
+            
+# User input
+def Morse_English():
+    s=input('Example code: .... ..  -- -.--  -. .- -- .  .. ...\n'
+            +'Decoded: HI MY NAME IS\n'
+            +'No space between codes representing a character\n'
+            +'1 space between codes of a single word\n'
+            +'2 spaces between codes of different words\n'
+            +'Enter: ')
+    
+    print(s+'\n')
+    message=code_extract(s)
+    m=''
+    # # converts list to string and stroes it in m
+    for i in message:
+        m+=i+' '
+    return m
+    
+    
+# # English to Morse
+
+# # converts english to morse
+def encode(s):
+    for k,v in morse.items():
+        if s==k:
+            v=v.replace(' ','')
+            return v
+    
+# # extracts each character and gives the final encoded message
+def English_Morse():
+    s = input("Enter Plain text: ")
+    s=s.upper()
+    s+=' ' 
+    w=''  # stores english
+    code=''  # stores morse
+    for i in range(len(s)):
+        if s[i] !=' ':
+            w+=encode(s[i])+' '
+        else:
+            code+=w+'  '
+            w=''
+    # # omits the extra space at the end of the variable code
+    return code[:-2]
+    
+
+# # User interface
+s=input("1 for Morse to English\n2 for English to Morse"
+        +'\n0 to quit\nEnter: ')
+s=int(s)
+if s==0 or s==1 or s==2:
+    while s!=0:
+        if s==1:
+            me=Morse_English()
+            print("Plain text: ",me)
+        elif s==2:
+            em=English_Morse()
+            print("Morse code: ",em)
+        s=input("Enter: ")
+        s=int(s)
+else:
+    print("Kindly enter correct number...")
